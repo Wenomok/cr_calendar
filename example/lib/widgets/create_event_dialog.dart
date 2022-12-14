@@ -8,6 +8,10 @@ import 'package:cr_calendar_example/widgets/week_days_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+enum DatePickerType {
+  CAMPAIGN, BEGIN_END, DASHBOARD
+}
+
 /// Pop up dialog for event creation.
 class CreateEventDialog extends StatefulWidget {
   const CreateEventDialog({super.key});
@@ -18,12 +22,16 @@ class CreateEventDialog extends StatefulWidget {
 
 class _CreateEventDialogState extends State<CreateEventDialog> {
   int _selectedColorIndex = 0;
-  final _eventNameController = TextEditingController();
+  final _eventNameController = TextEditingController(text: 'test');
 
-  String _rangeButtonText = 'Select date';
+  String _campaignButtonText = 'Camp date';
+  String _rangeButtonText = 'Select range date';
+  String _dashboardButtonText = 'Dash date';
 
+  DateTime? _campaignDate;
   DateTime? _beginDate;
   DateTime? _endDate;
+  DateTime? _dashboardDate;
 
   @override
   void dispose() {
@@ -119,6 +127,29 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
                 ),
                 const SizedBox(height: 16),
 
+                TextButton(
+                  onPressed: () {
+                    _showRangePicker(type: DatePickerType.CAMPAIGN);
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_today_outlined,
+                        color: violet,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _campaignButtonText,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: violet,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
                 /// Date selection button.
                 TextButton(
                   onPressed: _showRangePicker,
@@ -131,6 +162,29 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
                       const SizedBox(width: 8),
                       Text(
                         _rangeButtonText,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: violet,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    _showRangePicker(type: DatePickerType.DASHBOARD);
+                  },
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_today_outlined,
+                        color: violet,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _dashboardButtonText,
                         style: const TextStyle(
                           fontSize: 16,
                           color: violet,
@@ -212,26 +266,63 @@ class _CreateEventDialogState extends State<CreateEventDialog> {
   void _onEventCreation() {
     final beginDate = _beginDate;
     final endDate = _endDate;
+    final campaignDate = _campaignDate;
+    final dashboardDate = _dashboardDate;
     if (beginDate == null || endDate == null) {
       return;
     }
-    Navigator.of(context).pop(
-      CalendarEventModel(
-        name: _eventNameController.text,
-        begin: beginDate,
-        end: endDate,
-        eventColor: eventColors[_selectedColorIndex],
-      ),
-    );
+    if(campaignDate == null || dashboardDate == null) {
+      Navigator.of(context).pop(
+        CalendarEventModel(
+            name: _eventNameController.text,
+            begin: beginDate,
+            end: endDate,
+            eventColor: eventColors[_selectedColorIndex],
+        ),
+      );
+    } else {
+      Navigator.of(context).pop(
+        DXBCalendarEventModel(
+            name: _eventNameController.text,
+            begin: beginDate,
+            end: endDate,
+            eventColor: eventColors[_selectedColorIndex],
+            campaignBegin: campaignDate,
+            dashboardEnd: dashboardDate
+        ),
+      );
+    }
   }
 
   /// Show calendar in pop up dialog for selecting date range for calendar event.
-  void _showRangePicker() {
+  void _showRangePicker({DatePickerType type = DatePickerType.BEGIN_END}) {
     FocusScope.of(context).unfocus();
     showCrDatePicker(
       context,
       properties: DatePickerProperties(
-        onDateRangeSelected: _setRangeData,
+        onDateRangeSelected: (begin, end) {
+          if (begin == null) {
+            return;
+          }
+
+          switch(type) {
+            case DatePickerType.BEGIN_END:
+              _setRangeData(begin, end);
+              break;
+            case DatePickerType.CAMPAIGN:
+              setState(() {
+                _campaignDate = begin;
+                _campaignButtonText = _parseDateRange(begin, begin);
+              });
+              break;
+            case DatePickerType.DASHBOARD:
+              setState(() {
+                _dashboardDate = begin;
+                _dashboardButtonText = _parseDateRange(begin, begin);
+              });
+              break;
+          }
+        },
         dayItemBuilder: (properties) =>
             PickerDayItemWidget(properties: properties),
         weekDaysBuilder: (day) => WeekDaysWidget(day: day),

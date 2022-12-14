@@ -17,17 +17,23 @@ class EventWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(4)),
-        color: drawer.backgroundColor,
-      ),
-      child: FittedBox(
-        fit: BoxFit.fitHeight,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          drawer.name,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(color: Colors.white),
+        border: Border.all(
+          color: drawer.backgroundColor,
         ),
       ),
+      child: Stack(
+        children: [
+          FittedBox(
+            fit: BoxFit.fitHeight,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              drawer.name,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(color: Colors.black),
+            ),
+          ),
+        ],
+      )
     );
   }
 }

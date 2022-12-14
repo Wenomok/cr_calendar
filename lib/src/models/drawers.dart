@@ -34,3 +34,33 @@ class EventProperties {
 
   int size() => end - begin + 1;
 }
+
+class DXBEventProperties implements EventProperties {
+  DXBEventProperties({
+    required this.campaignBegin,
+    required this.begin,
+    required this.end,
+    required this.dashboardEnd,
+    required this.name,
+    required this.backgroundColor,
+  });
+
+  int campaignBegin;
+  /// Begin day number.
+  @override
+  int begin; // min 1 / max 7
+  /// End day number.
+  @override
+  int end; // min 1 / max 7
+  int dashboardEnd;
+  /// Background color.
+  @override
+  Color backgroundColor;
+
+  /// Name displayed at start of the event widget.
+  @override
+  String name;
+
+  @override
+  int size() => end - begin + 1;
+}

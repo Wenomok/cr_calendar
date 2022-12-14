@@ -5,6 +5,7 @@ import 'package:cr_calendar_example/utills/extensions.dart';
 import 'package:cr_calendar_example/widgets/create_event_dialog.dart';
 import 'package:cr_calendar_example/widgets/day_events_bottom_sheet.dart';
 import 'package:cr_calendar_example/widgets/day_item_widget.dart';
+import 'package:cr_calendar_example/widgets/dxb_event_widget.dart';
 import 'package:cr_calendar_example/widgets/event_widget.dart';
 import 'package:cr_calendar_example/widgets/week_days_widget.dart';
 import 'package:flutter/material.dart';
@@ -89,13 +90,19 @@ class _CalendarPageState extends State<CalendarPage> {
               firstDayOfWeek: WeekDay.monday,
               eventsTopPadding: 32,
               initialDate: _currentDate,
-              maxEventLines: 3,
+              maxEventLines: 4,
               controller: _calendarController,
               forceSixWeek: true,
               dayItemBuilder: (builderArgument) =>
                   DayItemWidget(properties: builderArgument),
               weekDaysBuilder: (day) => WeekDaysWidget(day: day),
-              eventBuilder: (drawer) => EventWidget(drawer: drawer),
+              eventBuilder: (drawer) {
+                // if(drawer is DXBEventProperties) {
+                //   return DXBEventWidget(drawer: drawer);
+                // } else {
+                  return EventWidget(drawer: drawer);
+                // }
+              },
               onDayClicked: _showDayEventsInModalSheet,
               minDate: DateTime.now().subtract(const Duration(days: 1000)),
               maxDate: DateTime.now().add(const Duration(days: 180)),
@@ -143,36 +150,36 @@ class _CalendarPageState extends State<CalendarPage> {
     _calendarController = CrCalendarController(
       onSwipe: _onCalendarPageChanged,
       events: [
-        CalendarEventModel(
-          name: '1 event',
-          begin: DateTime(now.year, now.month, (now.day).clamp(1, 28)),
-          end: DateTime(now.year, now.month, (now.day).clamp(1, 28)),
-          eventColor: eventColors[0],
-        ),
-        CalendarEventModel(
-          name: '2 event',
-          begin: DateTime(now.year, now.month - 1, (now.day - 2).clamp(1, 28)),
-          end: DateTime(now.year, now.month, (now.day + 2).clamp(1, 28)),
-          eventColor: eventColors[1],
-        ),
-        CalendarEventModel(
-          name: '3 event',
-          begin: DateTime(now.year, now.month, (now.day - 3).clamp(1, 28)),
-          end: DateTime(now.year, now.month + 1, (now.day + 4).clamp(1, 28)),
-          eventColor: eventColors[2],
-        ),
-        CalendarEventModel(
-          name: '4 event',
-          begin: DateTime(now.year, now.month - 1, (now.day).clamp(1, 28)),
-          end: DateTime(now.year, now.month + 1, (now.day + 5).clamp(1, 28)),
-          eventColor: eventColors[3],
-        ),
-        CalendarEventModel(
-          name: '5 event',
-          begin: DateTime(now.year, now.month + 1, (now.day + 1).clamp(1, 28)),
-          end: DateTime(now.year, now.month + 2, (now.day + 7).clamp(1, 28)),
-          eventColor: eventColors[4],
-        ),
+        // CalendarEventModel(
+        //   name: '1 event',
+        //   begin: DateTime(now.year, now.month, (now.day).clamp(1, 28)),
+        //   end: DateTime(now.year, now.month, (now.day).clamp(1, 28)),
+        //   eventColor: eventColors[0],
+        // ),
+        // CalendarEventModel(
+        //   name: '2 event',
+        //   begin: DateTime(now.year, now.month - 1, (now.day - 2).clamp(1, 28)),
+        //   end: DateTime(now.year, now.month, (now.day + 2).clamp(1, 28)),
+        //   eventColor: eventColors[1],
+        // ),
+        // CalendarEventModel(
+        //   name: '3 event',
+        //   begin: DateTime(now.year, now.month, (now.day - 3).clamp(1, 28)),
+        //   end: DateTime(now.year, now.month + 1, (now.day + 4).clamp(1, 28)),
+        //   eventColor: eventColors[2],
+        // ),
+        // CalendarEventModel(
+        //   name: '4 event',
+        //   begin: DateTime(now.year, now.month - 1, (now.day).clamp(1, 28)),
+        //   end: DateTime(now.year, now.month + 1, (now.day + 5).clamp(1, 28)),
+        //   eventColor: eventColors[3],
+        // ),
+        // CalendarEventModel(
+        //   name: '5 event',
+        //   begin: DateTime(now.year, now.month + 1, (now.day + 1).clamp(1, 28)),
+        //   end: DateTime(now.year, now.month + 2, (now.day + 7).clamp(1, 28)),
+        //   eventColor: eventColors[4],
+        // ),
       ],
     );
   }

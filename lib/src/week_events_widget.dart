@@ -44,12 +44,21 @@ class WeekEventsWidget extends StatelessWidget {
     for (var i = 0; i < eventLines.length; i++) {
       for (var j = 0; j < eventLines[i].events.length; j++) {
         final item = eventLines[i].events[j];
+        double left = (item.begin - 1) * itemWidth + padding.left;
+        double right = (Contract.kWeekDaysCount - item.end) * itemWidth +
+            padding.right;
+
+        if(item is DXBEventProperties) {
+          left = (item.campaignBegin - 1) * itemWidth + padding.left;
+          right = (Contract.kWeekDaysCount - item.dashboardEnd) * itemWidth +
+              padding.right;
+        }
+
         widgets.add(
           Positioned(
             top: i * lineHeight,
-            left: (item.begin - 1) * itemWidth + padding.left,
-            right: (Contract.kWeekDaysCount - item.end) * itemWidth +
-                padding.right,
+            left: left,
+            right: right,
             child: Container(
               height:
                   lineHeight - itemHeight / Contract.kDistanceBetweenEventsCoef,
