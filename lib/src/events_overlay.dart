@@ -11,6 +11,7 @@ class EventsOverlay extends StatelessWidget {
     required this.begin,
     required this.itemWidth,
     required this.topPadding,
+    required this.bottomPadding,
     required this.itemHeight,
     required this.maxLines,
     this.padding,
@@ -23,6 +24,7 @@ class EventsOverlay extends StatelessWidget {
   final double itemWidth;
   final double itemHeight;
   final double topPadding;
+  final double bottomPadding;
   final int maxLines;
   final EdgeInsets? padding;
   final EventBuilder? eventBuilder;
@@ -33,7 +35,7 @@ class EventsOverlay extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: weekList.length,
       itemBuilder: (context, index) {
-        final lineHeight = (itemHeight - topPadding) / maxLines;
+        final lineHeight = (itemHeight - topPadding - bottomPadding) / maxLines;
 
         return WeekEventsWidget(
           eventBuilder: eventBuilder,
@@ -42,6 +44,7 @@ class EventsOverlay extends StatelessWidget {
           itemHeight: itemHeight,
           itemWidth: itemWidth,
           topPadding: topPadding,
+          bottomPadding: bottomPadding,
           lineHeight: lineHeight,
           padding: padding,
         );

@@ -27,6 +27,7 @@ class MonthItem extends StatefulWidget {
     this.onRangeSelected,
     this.touchMode = TouchMode.singleTap,
     this.eventTopPadding = 0,
+    this.eventBottomPadding = 0,
     this.onDayTap,
     this.firstWeekDay = WeekDay.sunday,
     super.key,
@@ -44,6 +45,7 @@ class MonthItem extends StatefulWidget {
   final CrCalendarController controller;
   final DateTime displayMonth;
   final double? eventTopPadding;
+  final double? eventBottomPadding;
   final TouchMode touchMode;
   final WeekDay firstWeekDay;
 
@@ -144,6 +146,7 @@ class MonthItemState extends State<MonthItem> {
                                     topPadding: widget.eventTopPadding ??
                                         (itemHeight /
                                             Contract.kDayItemTopPaddingCoef),
+                                    bottomPadding: widget.eventBottomPadding ?? 0.0,
                                     itemWidth: itemWidth,
                                     itemHeight: itemHeight,
                                     begin: _beginRange,
