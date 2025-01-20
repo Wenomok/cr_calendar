@@ -86,8 +86,8 @@ class MonthCalendarWidgetState extends State<MonthCalendarWidget> {
 
     if (beginRange == null ||
         endRange == null ||
-        widget.begin.isAfter(endRange) ||
-        widget.end.isBefore(beginRange)) {
+        widget.begin.isAfter(Jiffy.parseFromDateTime(endRange)) ||
+        widget.end.isBefore(Jiffy.parseFromDateTime(beginRange))) {
       return;
     }
 
@@ -114,7 +114,7 @@ class MonthCalendarWidgetState extends State<MonthCalendarWidget> {
     if (selectedDay != null) {
       if (selectedDay.isSameOrAfter(widget.begin) &&
           selectedDay.isSameOrBefore(widget.end)) {
-        if (Jiffy(widget.begin).add(days: index).isSame(selectedDay)) {
+        if (Jiffy.parseFromJiffy(widget.begin).add(days: index).isSame(selectedDay)) {
           return true;
         }
       }
@@ -161,7 +161,7 @@ class MonthCalendarWidgetState extends State<MonthCalendarWidget> {
 
       return GestureDetector(
         onTap: () {
-          final tappedDate = Jiffy(widget.begin).add(days: index);
+          final tappedDate = Jiffy.parseFromJiffy(widget.begin).add(days: index);
           widget.onDayTap?.call(tappedDate);
           if (widget.touchMode == TouchMode.singleTap) {
             _performDaySelecting(tappedDate);

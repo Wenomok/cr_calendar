@@ -49,8 +49,8 @@ List<EventProperties> resolveEventDrawersForWeek(
     int week, Jiffy monthStart, List<CalendarEventModel> events) {
   final drawers = <EventProperties>[];
 
-  final beginDate = Jiffy(monthStart).add(weeks: week);
-  final endDate = Jiffy(beginDate).add(days: Contract.kWeekDaysCount - 1);
+  final beginDate = Jiffy.parseFromJiffy(monthStart).add(weeks: week);
+  final endDate = Jiffy.parseFromJiffy(beginDate).add(days: Contract.kWeekDaysCount - 1);
 
   for (final e in events) {
     final simpleEvent = _mapSimpleEventToDrawerOrNull(e, beginDate, endDate);
@@ -95,35 +95,35 @@ EventProperties? _mapSimpleEventToDrawerOrNull(
       event.dashboardEnd.minute,
     ).toJiffy();
 
-    if (jDashboardEnd.isBefore(begin, Units.DAY) || jCampaignBegin.isAfter(end, Units.DAY)) {
+    if (jDashboardEnd.isBefore(begin, unit: Unit.day) || jCampaignBegin.isAfter(end, unit: Unit.day)) {
       return null;
     }
     var campaignBeginDay = 1;
     if (jCampaignBegin.isSameOrAfter(begin)) {
-      campaignBeginDay = (begin.day - jCampaignBegin.day < 1)
-          ? 1 - (begin.day - jCampaignBegin.day)
-          : 1 - (begin.day - jCampaignBegin.day) + WeekDay.values.length;
+      campaignBeginDay = (begin.date - jCampaignBegin.date < 1)
+          ? 1 - (begin.date - jCampaignBegin.date)
+          : 1 - (begin.date - jCampaignBegin.date) + WeekDay.values.length;
     }
 
     var beginDay = Contract.kWeekDaysCount;
     if (jBegin.isSameOrAfter(begin)) {
-      beginDay = (begin.day - jBegin.day < 1)
-          ? 1 - (begin.day - jBegin.day)
-          : 1 - (begin.day - jBegin.day) + WeekDay.values.length;
+      beginDay = (begin.date - jBegin.date < 1)
+          ? 1 - (begin.date - jBegin.date)
+          : 1 - (begin.date - jBegin.date) + WeekDay.values.length;
     }
 
     var endDay = Contract.kWeekDaysCount;
     if (jEnd.isSameOrAfter(begin)) {
-      endDay = (begin.day - jEnd.day < 1)
-          ? 1 - (begin.day - jEnd.day)
-          : 1 - (begin.day - jEnd.day) + WeekDay.values.length;
+      endDay = (begin.date - jEnd.date < 1)
+          ? 1 - (begin.date - jEnd.date)
+          : 1 - (begin.date - jEnd.date) + WeekDay.values.length;
     }
 
     var dashboardEndDay = Contract.kWeekDaysCount;
     if (jDashboardEnd.isSameOrBefore(end)) {
-      dashboardEndDay = (begin.day - jDashboardEnd.day < 1)
-          ? 1 - (begin.day - jDashboardEnd.day)
-          : 1 - (begin.day - jDashboardEnd.day) + WeekDay.values.length;
+      dashboardEndDay = (begin.date - jDashboardEnd.date < 1)
+          ? 1 - (begin.date - jDashboardEnd.date)
+          : 1 - (begin.date - jDashboardEnd.date) + WeekDay.values.length;
     }
 
     return DXBEventProperties(
@@ -150,22 +150,22 @@ EventProperties? _mapSimpleEventToDrawerOrNull(
       event.end.minute,
     ).toJiffy();
 
-    if (jEnd.isBefore(begin, Units.DAY) || jBegin.isAfter(end, Units.DAY)) {
+    if (jEnd.isBefore(begin, unit: Unit.day) || jBegin.isAfter(end, unit: Unit.day)) {
       return null;
     }
 
     var beginDay = 1;
     if (jBegin.isSameOrAfter(begin)) {
-      beginDay = (begin.day - jBegin.day < 1)
-          ? 1 - (begin.day - jBegin.day)
-          : 1 - (begin.day - jBegin.day) + WeekDay.values.length;
+      beginDay = (begin.date - jBegin.date < 1)
+          ? 1 - (begin.date - jBegin.date)
+          : 1 - (begin.date - jBegin.date) + WeekDay.values.length;
     }
 
     var endDay = Contract.kWeekDaysCount;
     if (jEnd.isSameOrBefore(end)) {
-      endDay = (begin.day - jEnd.day < 1)
-          ? 1 - (begin.day - jEnd.day)
-          : 1 - (begin.day - jEnd.day) + WeekDay.values.length;
+      endDay = (begin.date - jEnd.date < 1)
+          ? 1 - (begin.date - jEnd.date)
+          : 1 - (begin.date - jEnd.date) + WeekDay.values.length;
     }
 
     return EventProperties(
