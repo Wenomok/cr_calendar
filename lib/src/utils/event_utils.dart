@@ -212,7 +212,9 @@ List<NotFittedWeekEventCount> calculateOverflowedEvents(
 
     for (final event in week) {
       for (var i = event.begin - 1; i < event.end; i++) {
-        countList[i]++;
+        if(i >= 0 && i <= 6) {
+          countList[i]++;
+        }
       }
     }
     countList = countList.map((count) {
