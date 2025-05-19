@@ -91,16 +91,16 @@ class MonthItemState extends State<MonthItem> {
     final display =
         DateTime.utc(widget.displayMonth.year, widget.displayMonth.month)
             .toJiffy();
-    _beginOffset = (widget.firstWeekDay.index > display.date - 1)
-        ? display.date - 1 + (WeekDay.values.length - widget.firstWeekDay.index)
-        : display.date - 1 - widget.firstWeekDay.index;
+    _beginOffset = (widget.firstWeekDay.index > display.dayOfWeek - 1)
+        ? display.dayOfWeek - 1 + (WeekDay.values.length - widget.firstWeekDay.index)
+        : display.dayOfWeek - 1 - widget.firstWeekDay.index;
     _daysInMonth = display.daysInMonth;
     _beginRange = Jiffy.parseFromJiffy(Jiffy.parseFromJiffy(display).subtract(days: _beginOffset));
     _endRange = Jiffy.parseFromJiffy(Jiffy.parseFromJiffy(display).add(days: _daysInMonth - 1));
-    if (_endRange.date != WeekDay.sunday.index + 1) {
+    if (_endRange.dayOfWeek != WeekDay.sunday.index + 1) {
       _endRange.add(
           days: WeekDay.values.length -
-              _endRange.date +
+              _endRange.dayOfWeek +
               widget.firstWeekDay.index);
     }
 
